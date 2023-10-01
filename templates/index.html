@@ -1,0 +1,46 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+    <title>Video Downloader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Video Downloader</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <label for="url">Enter Video URL:</label>
+                <input type="text" class="form-control" id="url" name="url">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="downloadVideo()">Download</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function downloadVideo() {
+            const url = $("#url").val();
+            $.ajax({
+                url: "/download",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ url: url }),
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 400) {
+                        alert(xhr.responseJSON.message);
+                    } else {
+                        alert("Server error occurred");
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
